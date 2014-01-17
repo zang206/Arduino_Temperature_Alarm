@@ -1,23 +1,26 @@
 /*Mintduino Temperature Alarm
 By Jason Procknow
-First draft was 1-10-2014
+First version of code for project was started 1-10-2014
 
 version history
 
 !!!!!!!!!!!!!!!!!!!as of 1-16-2014 code not working yet!!!!!!!!!!
+
 version 0.9 1-17-2014
--version change to 0.9 now that added to gitHub
+-version change to 0.9 now that added to gitHub. Added my own debounce
+code based on previous debounce code only in design and not content.
+-Added rework of 'if' decision structure based on hand written code
+from graph pad. Source is on project.procknation.com
+-Found that the first try at if structure was to complicated. I
+simplified the structure to basic boolean decisions.
+-Also editing code and comments to make it easier to read.
 
 version 2.0 1-16-2014 
 -Changing to 2.0 because this will be a major code redesign. Over
 80% of the code will be different all of which will be documented
 here or on projects.procknation.com.
--Added rework of if decision structure based on hand written code
-from graph pad.  Source is on project.procknation.com
-found that the first try at if structure was to complicated. I
-simplified the structure to basic T,F decisions.
--Also removed previous debouce function code and added my own debounce
-code based on previous debounce code only in design and not content.
+
+-Also removed previous debouce function code 
 
 version 1.8 1-15-2014
 Added first try at decision processing stucture and switch debounce.
@@ -38,16 +41,18 @@ keeping track of version changes.
 #include "Adafruit_LEDBackpack.h"
 #include "Adafruit_GFX.h"
 
-#define ONE_WIRE_BUS 2 // Data wire is plugged into port 2 on the Arduino
+#define ONE_WIRE_BUS 2 // Data wire is plugged into D2 on the Arduino
 
-Adafruit_7segment matrix = Adafruit_7segment(); //setup matrix instance to communicate with the Adafruit 0.56" 7-segment HT16K33 backpack Display
+//setup matrix instance to communicate with the Adafruit 0.56" 7-segment HT16K33 backpack Display
+Adafruit_7segment matrix = Adafruit_7segment();
 
-OneWire oneWire(ONE_WIRE_BUS); // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
+// Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
+OneWire oneWire(ONE_WIRE_BUS);
 
-DallasTemperature sensors(&oneWire); // Pass our oneWire reference to Dallas Temperature.
+// Pass our oneWire reference to Dallas Temperature.
+DallasTemperature sensors(&oneWire); 
 
-// constants won't change. They're used here to 
-// set pin numbers:
+// constants won't change. They're used here to set pin numbers:
 const int buzzer_pin = 13;
 const int dualLED_green_pin = 7;
 const int dualLED_red_pin = 8;

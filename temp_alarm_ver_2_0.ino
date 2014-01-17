@@ -44,13 +44,13 @@ keeping track of version changes.
 #define ONE_WIRE_BUS 2 // Data wire is plugged into D2 on the Arduino
 
 //setup matrix instance to communicate with the Adafruit 0.56" 7-segment HT16K33 backpack Display
-Adafruit_7segment matrix = Adafruit_7segment();
+Adafruit_7segment 7segDisplay = Adafruit_7segment();
 
 // Setup a oneWire instance to communicate with any OneWire devices (not just Maxim/Dallas temperature ICs)
 OneWire oneWire(ONE_WIRE_BUS);
 
 // Pass our oneWire reference to Dallas Temperature.
-DallasTemperature sensors(&oneWire); 
+DallasTemperature TempSensor(&oneWire); 
 
 // constants won't change. They're used here to set pin numbers:
 const int buzzer_pin = 13;
@@ -64,7 +64,7 @@ const int snooze_pin = 12;
 // will quickly become a bigger number than can be stored in an int.
 long lastDebounceTime = 0;  // the last time the output pin was toggled
 long debounceDelay = 50;    // the debounce time; increase if the output flickers
-
+long MaxTempF = 75
 
 
 
@@ -83,31 +83,31 @@ void setup(void)
   Serial.begin(9600);  //start the serial port for the debug terminal
   Serial.println("MintDuino Temperature Alarm");
 
-  matrix.begin(0x70);  //Start the 8 character, 7-segment display
+  7segDisplay.begin(0x70);  //Start the 4 character, 7-segment display
   
-  sensors.begin();  // Start up the library
+  TempSensor.begin();  // Start up the Dallas library
 }
 
 
 void loop(void)
 { 
-  // call sensors.requestTemperatures() to issue a global temperature 
+  // call TempSensor.requestTemperatures() to issue a global temperature 
   // request to all devices on the bus
   Serial.print("Requesting temperatures...");
-  sensors.requestTemperatures(); // Send the command to get temperatures
+  TempSensor.requestTemperatures(); // Send the command to get temperatures
   Serial.println("DONE");
   Serial.print("Temperature for the device 1 (index 0) is: ");
   Serial.println(sensors.getTempFByIndex(0));
-  matrix.println(sensors.getTempFByIndex(0));
-  matrix.writeDisplay();
-  if (sensors.getTempFByIndex(0) > 75.00)
+  7segDisplay.println(TempSensor.getTempFByIndex(0));
+  7segDisplay.writeDisplay();
+  if (TempSensor.getTempFByIndex(0) > MaxTempF)
   {
     Serial.println("alarmalarm");
     if (digitalRead(snooze_pin) == HIGH)
     {
       Serial.println("button pressed");
       
-    matrix.blinkRate(1);
+    7segDisplay.blinkRate(1);
     /*digitalWrite(buzzer_pin, HIGH);   // turn the LED on (HIGH is the voltage level)
     digitalWrite(dualLED_green_pin, HIGH);   // turn the LED on (HIGH is the voltage level)
     digitalWrite(dualLED_red_pin, LOW);   // turn the LED on (HIGH is the voltage level)
@@ -122,13 +122,13 @@ void loop(void)
   }
   else
   {
-    matrix.blinkRate(0);
+    7segDisplay.blinkRate(0);
     digitalWrite(buzzer_pin, LOW);    // turn the LED off by making the voltage LOW
     digitalWrite(dualLED_green_pin, LOW);    // turn the LED off by making the voltage LOW
     digitalWrite(dualLED_red_pin, LOW);    // turn the LED off by making the voltage LOW
   }
   
-  matrix.writeDisplay();
+  7segDisplay.writeDisplay();
   //delay(500);
   
   }

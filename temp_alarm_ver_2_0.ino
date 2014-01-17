@@ -5,6 +5,8 @@ First draft was 1-10-2014
 version history
 
 !!!!!!!!!!!!!!!!!!!as of 1-16-2014 code not working yet!!!!!!!!!!
+version 0.9 1-17-2014
+-version change to 0.9 now that added to gitHub
 
 version 2.0 1-16-2014 
 -Changing to 2.0 because this will be a major code redesign. Over
@@ -126,32 +128,3 @@ void loop(void)
   
   }
 }
-
-/* 
- Debounce
- 
- Each time the input pin goes from LOW to HIGH (e.g. because of a push-button
- press), the output pin is toggled from LOW to HIGH or HIGH to LOW.  There's
- a minimum delay between toggles to debounce the circuit (i.e. to ignore
- noise).  
- 
- The circuit:
- * LED attached from pin 13 to ground
- * pushbutton attached from pin 2 to +5V
- * 10K resistor attached from pin 2 to ground
- 
- * Note: On most Arduino boards, there is already an LED on the board
- connected to pin 13, so you don't need any extra components for this example.
- 
- 
- created 21 November 2006
- by David A. Mellis
- modified 30 Aug 2011
- by Limor Fried
- modified 28 Dec 2012
- by Mike Walters
- 
- This example code is in the public domain.
- 
- http://www.arduino.cc/en/Tutorial/Debounce
- */

@@ -57,14 +57,16 @@ const int buzzer_pin = 13;
 const int dualLED_green_pin = 7;
 const int dualLED_red_pin = 8;
 const int snooze_pin = 12;
+const long SnoozeLength = 600000; //600000 mills = 10 min
 const int MaxTemp = 75
 
 // Variables will change:
 
 // the following variables are long's because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
-long lastDebounceTime = 0;  // the last time the output pin was toggled
+unsigned long SnoozeStartTime = 0;  // the last time the output pin was toggled
 long debounceDelay = 50;    // the debounce time; increase if the output flickers
+boolean SnoozeActive = false;  //stores current state of snooze button
 float currentTemp = 0; // varible to store current temp so get temp function only 
                         //needs to run once.
 
@@ -81,7 +83,7 @@ void setup(void)
   //define the inital states of the digital outputs
   digitalWrite(buzzer_pin, LOW); //turn buzzer off. set high to turn on buzzer.
   //the dualLED is a 2 pin LED with two LEDs connected in parallel in opposite polarities
-  //so only one can be on at one time. radio shack part# 276-012 ie if you want green then
+  //so only one can be on at one time. radioshack part# 276-012 ie if you want green then
   //green_pin must be high and red_pin must be low.  vise versa for red. if both are low or
   //high the LED will be off.
   digitalWrite(dualLED_green_pin, LOW);   // turn the LED off if both low
@@ -106,14 +108,16 @@ void loop(void)
   Serial.print("Temperature for the device 1 (index 0) is: ");
   currentTemp = sensors.getTempFByIndex(0);
   Serial.println(currentTemp);
-  7segDisplay.println(currentTemp);
-  7segDisplay.writeDisplay();
-  if (currentTemp > MaxTempF)
+  
+  SnoozeActive = readSnoozeButton(int button_pin);
+  
+  7segDisplay.println(currentTemp); //display current temp on display
+  7segDisplay.writeDisplay();  //write display memory to physical device
+  if (currentTemp > MaxTempF)  //evaluate temp compared to high temp alarm value in degrees F
   {
-    Serial.println("alarmalarm");
-    if (digitalRead(snooze_pin) == HIGH)
+    if (SnoozeActive)
     {
-      Serial.println("button pressed");
+      Serial.println("Snooze Active");
       
     
   }
@@ -131,12 +135,31 @@ void loop(void)
   }
 }
 
-function readSnoozeButton(int button_pin)
+boolean readSnoozeButton(int button_pin)
 {
-  return digitalRead(button_pin);
+  int snooze1 = digitalRead(button_pin);
+  delay(50);
+  if (snooze1 == true && digitalRead(button_pin) == true)
+  {
+	SnoozeStartTime = mills();
+	return true;
+  }
+  else if (SnoozeActive == true && (mills() - SnoozeStartTime) > SnoozeLength)
+  {
+	SnoozeStartTime = 0;
+	return false;
+  }
+  else if (SnoozeActive == true)
+  {
+    return true;
+  }
+  else
+  {
+  return SnoozeActive;
+  }
 }
 
-function soundSiren()
+void soundSiren()
 {
   7segDisplay.blinkRate(1);
   digitalWrite(buzzer_pin, HIGH);   // turn the buzzer on

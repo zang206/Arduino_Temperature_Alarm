@@ -57,6 +57,7 @@ const int buzzer_pin = 13;
 const int dualLED_green_pin = 7;
 const int dualLED_red_pin = 8;
 const int snooze_pin = 12;
+const int MaxTemp = 75
 
 // Variables will change:
 
@@ -64,7 +65,8 @@ const int snooze_pin = 12;
 // will quickly become a bigger number than can be stored in an int.
 long lastDebounceTime = 0;  // the last time the output pin was toggled
 long debounceDelay = 50;    // the debounce time; increase if the output flickers
-long MaxTempF = 75
+float currentTemp = 0; // varible to store current temp so get temp function only 
+                        //needs to run once.
 
 
 
@@ -91,7 +93,7 @@ void setup(void)
   7segDisplay.begin(0x70);  //Start the 4 character, 7-segment display
   
   TempSensor.begin();  // Start up the Dallas devices library for the DS18B20
-}
+} //end setup function
 
 
 void loop(void)
@@ -102,10 +104,11 @@ void loop(void)
   TempSensor.requestTemperatures(); // Send the command to get temperature from DS18B20
   Serial.println("DONE");
   Serial.print("Temperature for the device 1 (index 0) is: ");
-  Serial.println(sensors.getTempFByIndex(0));
-  7segDisplay.println(TempSensor.getTempFByIndex(0));
+  currentTemp = sensors.getTempFByIndex(0);
+  Serial.println(currentTemp);
+  7segDisplay.println(currentTemp);
   7segDisplay.writeDisplay();
-  if (TempSensor.getTempFByIndex(0) > MaxTempF)
+  if (currentTemp > MaxTempF)
   {
     Serial.println("alarmalarm");
     if (digitalRead(snooze_pin) == HIGH)

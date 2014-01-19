@@ -113,13 +113,14 @@ void loop(void)
   
   7segDisplay.println(currentTemp); //display current temp on display
   7segDisplay.writeDisplay();  //write display memory to physical device
+  
   if (currentTemp > MaxTempF)  //evaluate temp compared to high temp alarm value in degrees F
   {
     if (SnoozeActive)
     {
       Serial.println("Snooze Active");
       
-    
+    }
   }
   else
   {
@@ -132,7 +133,7 @@ void loop(void)
   7segDisplay.writeDisplay();
   //delay(500);
   
-  }
+
 }
 
 boolean readSnoozeButton(int button_pin)
@@ -153,9 +154,9 @@ boolean readSnoozeButton(int button_pin)
   {
     return true;
   }
-  else
+  else if (SnoozeActive == false)
   {
-  return SnoozeActive;
+    return false;
   }
 }
 

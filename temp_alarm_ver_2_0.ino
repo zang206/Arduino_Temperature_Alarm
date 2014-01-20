@@ -85,26 +85,26 @@ void loop(void)
   7segDisplay.println(currentTemp); //display current temp on display
   7segDisplay.writeDisplay();  //write display memory to physical device
   
-  if (currentTemp > MaxTempF)  //evaluate temp compared to high temp alarm value in degrees F
+  if (currentTemp > MaxTempF && SnoozeActive)  //evaluate temp compared to high temp alarm value in degrees F
   {
-    if (SnoozeActive)
-    {
-      Serial.println("Snooze Active");
+    Serial.println("Snooze Active");
       
-    }
+    
   }
-  else
+  else if (currentTemp > MaxTempF && SnoozeActive ==false)
   {
-    7segDisplay.blinkRate(0);
+    Serial.println("Alarm On")
+    soundAlarm();
+    
+    /*7segDisplay.blinkRate(0);
     digitalWrite(buzzer_pin, LOW);    // turn the LED off by making the voltage LOW
     digitalWrite(dualLED_green_pin, LOW);    // turn the LED off by making the voltage LOW
     digitalWrite(dualLED_red_pin, LOW);    // turn the LED off by making the voltage LOW
+*/
   }
-  
-  7segDisplay.writeDisplay();
-  //delay(500);
-  
-
+  else if (currentTemp < MaxTempf && SnoozeActive == true)
+  {
+    SnoozeActive = false;
 }
 
 boolean readSnoozeButton(int button_pin)
@@ -131,7 +131,7 @@ boolean readSnoozeButton(int button_pin)
   }
 }
 
-void soundSiren()
+void soundAlarm()
 {
   7segDisplay.blinkRate(1);
   digitalWrite(buzzer_pin, HIGH);   // turn the buzzer on

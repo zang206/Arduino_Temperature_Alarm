@@ -88,23 +88,19 @@ void loop(void)
   if (currentTemp > MaxTempF && SnoozeActive)  //evaluate temp compared to high temp alarm value in degrees F
   {
     Serial.println("Snooze Active");
-      
+    //alarm off  
     
   }
-  else if (currentTemp > MaxTempF && SnoozeActive ==false)
+  else if (currentTemp > MaxTempF && SnoozeActive == false)
   {
     Serial.println("Alarm On")
     soundAlarm();
-    
-    /*7segDisplay.blinkRate(0);
-    digitalWrite(buzzer_pin, LOW);    // turn the LED off by making the voltage LOW
-    digitalWrite(dualLED_green_pin, LOW);    // turn the LED off by making the voltage LOW
-    digitalWrite(dualLED_red_pin, LOW);    // turn the LED off by making the voltage LOW
-*/
+ 
   }
   else if (currentTemp < MaxTempf && SnoozeActive == true)
   {
     SnoozeActive = false;
+  {  
 }
 
 boolean readSnoozeButton(int button_pin)

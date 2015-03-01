@@ -1,7 +1,7 @@
-mintduino_temp_alarm
+Arduino_Temperature_Alarm
 ====================
 
-A Mintduino Temperature Alarm
+An Arduino Temperature Alarm
 
 What is does.  I am making this temperature alarm because I currently do not have central heat and the wall gas heater does not have a thermostat, just low, medium, and high.  My wife and I have a habit of forgetting to turn down the heater before bed and will wake up to a living room at 85 degrees F.  Sometimes it is worse and I have to turn on my air conditioner to cool it down even when it is 20 degrees F outside. This project will set of an alarm and flash a LED when the temp rises above a set temperature.  Go to projects.procknation.com to see the hardware that this code works on.
 
